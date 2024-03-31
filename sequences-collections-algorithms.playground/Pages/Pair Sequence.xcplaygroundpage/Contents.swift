@@ -16,31 +16,61 @@ for (index, first) in elements.enumerated() {
 print("Sequence Version")
 
 public extension Collection {
-  func pairs() -> AnySequence<(Element, Element)> {
-    guard var index1 = index(startIndex, offsetBy: 0, limitedBy: endIndex),
-      var index2 = index(index1, offsetBy: 1, limitedBy: endIndex)
-      else {
-        return AnySequence { EmptyCollection.Iterator() }
-    }
-    return AnySequence {
-      AnyIterator {
-        if index1 >= self.endIndex || index2 >= self.endIndex {
-          return nil
-        }
-        defer {
-          index2 = self.index(after: index2)
-          if index2 >= self.endIndex {
-            index1 = self.index(after: index1)
-            index2 = self.index(after: index1)
-          }
-        }
-        return (self[index1], self[index2])
-      }
-    }
-  }
+	func pairs() -> AnySequence<(Element, Element)> {
+		guard var index1 = index(startIndex, offsetBy: 0, limitedBy: endIndex),
+					var index2 = index(index1, offsetBy: 0, limitedBy: endIndex) else {
+			return AnySequence { EmptyCollection.Iterator() }
+		}
+		
+		// TODO: 没太懂
+		return AnySequence {
+			AnyIterator {
+				if index1 >= self.endIndex || index2 >= self.endIndex {
+					return nil
+				}
+				defer {
+					index2 = self.index(after:index2)
+					if index2 >= self.endIndex {
+						index1 = self.index(after:index1)
+						index2 = self.index(after:index1)
+					}
+				}
+				return (self[index1], self[index2])
+			}
+		}
+	}
 }
 
 for (first, second) in elements.pairs() {
-  print(first, second)
+	print((first, second))
 }
+
+//public extension Collection {
+//  func pairs() -> AnySequence<(Element, Element)> {
+//    guard var index1 = index(startIndex, offsetBy: 0, limitedBy: endIndex),
+//      var index2 = index(index1, offsetBy: 1, limitedBy: endIndex)
+//      else {
+//        return AnySequence { EmptyCollection.Iterator() }
+//    }
+//    return AnySequence {
+//      AnyIterator {
+//        if index1 >= self.endIndex || index2 >= self.endIndex {
+//          return nil
+//        }
+//        defer {
+//          index2 = self.index(after: index2)
+//          if index2 >= self.endIndex {
+//            index1 = self.index(after: index1)
+//            index2 = self.index(after: index1)
+//          }
+//        }
+//        return (self[index1], self[index2])
+//      }
+//    }
+//  }
+//}
+//
+//for (first, second) in elements.pairs() {
+//  print(first, second)
+//}
 
